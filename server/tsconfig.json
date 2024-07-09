@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "baseUrl": "./src",
+    "paths": {
+      "@appTypes": ["types"],
+      "@appModels": ["models"],
+      "@appMiddlewares": ["middlewares"],
+      "@appRoutes": ["routes"],
+      "@appControllers": ["controllers"],
+      "@appServices": ["services"],
+      "@appErrors": ["errors"],
+      "@appConfig": ["config"]
+    },
+    "sourceMap": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "strict": true,
+    "skipLibCheck": true
+  }
+}
