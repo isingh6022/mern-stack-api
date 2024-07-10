@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 
 import { ApiError, errorHandler } from '@appErrors';
 import { router } from '@appRoutes';
+import { requestFrequencyValidator } from '@appMiddlewares';
 
 /**
  * Creating the app and adding the middlewares.
@@ -26,7 +27,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 /**
  * Setting up routes.
  */
-app.use('/', router);
+app.use('/', requestFrequencyValidator, router);
 
 // Not found handler - stack trace is not to be populated for this, instead url is shown.
 app.use((req: Req, res: Res, next: Next) =>
