@@ -4,6 +4,9 @@ export interface EnvSchema {
   MODE: string;
   JWT_SECRET: string;
   JWT_DURATION_MIN: number;
+  STOCK_DATA_CACHE_DURATION_SECONDS: number;
+  REQ_PER_IP: number;
+  REQ_PER_IP_TIMEOUT_SECONDS: number;
 }
 
 export enum Modes {

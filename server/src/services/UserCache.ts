@@ -1,7 +1,8 @@
 import { AppCache, User } from '@appTypes';
 import { UserDAO } from './UserDAO';
-import { MethodNotImplemented } from '@appErrors';
+import { ApiError, MethodNotImplemented } from '@appErrors';
 import { BaseSingleton } from './BaseSingleton';
+import httpStatus from 'http-status';
 
 export class UserCache extends BaseSingleton implements AppCache<string, User> {
   static get instance(): UserCache {
@@ -32,6 +33,12 @@ export class UserCache extends BaseSingleton implements AppCache<string, User> {
     return Promise.resolve(null);
   }
   async save(u: User): Promise<boolean> {
+    const user = await this.getByUserName(u.username);
+
+    if (user) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Username already taken');
+    }
+
     const ts = new Date().getTime();
     const id = ts + '' + Math.random();
     u.id = id;

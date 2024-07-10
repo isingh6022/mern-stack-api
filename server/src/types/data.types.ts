@@ -39,8 +39,16 @@ interface UserLoginCredentials {
 /**
  * Stocks
  */
-interface StockModelForDAO {}
-interface Stock {}
+interface StockModelForDAO {
+  identifier1: string;
+  identifier2: string;
+  currPrice: number;
+}
+interface Stock {
+  id: string;
+  name: string;
+  price: number;
+}
 
 export type {
   AppDAO,

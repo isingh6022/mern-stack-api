@@ -13,7 +13,10 @@ const envSchema = Joi.object<EnvSchema>()
       `Debug (${Modes.DEBUG}) or production (${Modes.PRODUCTION}) mode.`
     ),
     JWT_SECRET: Joi.string().default('some random secret key'),
-    JWT_DURATION_MIN: Joi.number().default(300)
+    JWT_DURATION_MIN: Joi.number().default(300),
+    STOCK_DATA_CACHE_DURATION_SECONDS: Joi.number().default(300),
+    REQ_PER_IP: Joi.number().default(5),
+    REQ_PER_IP_TIMEOUT_SECONDS: Joi.number().default(60)
   })
   .options({ allowUnknown: true });
 
@@ -45,6 +48,15 @@ const configs = {
   },
   get jwtDurationMin(): number {
     return value.JWT_DURATION_MIN;
+  },
+  get stockDataCacheDurationSec(): number {
+    return value.STOCK_DATA_CACHE_DURATION_SECONDS;
+  },
+  get reqPerIpLimit(): number {
+    return value.REQ_PER_IP;
+  },
+  get reqPerIpTimeoutSec(): number {
+    return value.REQ_PER_IP_TIMEOUT_SECONDS;
   }
 };
 
