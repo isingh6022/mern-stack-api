@@ -7,6 +7,9 @@ export interface EnvSchema {
   STOCK_DATA_CACHE_DURATION_SECONDS: number;
   REQ_PER_IP: number;
   REQ_PER_IP_TIMEOUT_SECONDS: number;
+  API_ENDPOINT: string;
+  API_KEY: string;
+  API_FUNCTION: string;
 }
 
 export enum Modes {
