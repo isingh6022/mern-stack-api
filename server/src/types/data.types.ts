@@ -40,9 +40,19 @@ interface UserLoginCredentials {
  * Stocks
  */
 interface StockModelForDAO {
-  identifier1: string;
-  identifier2: string;
-  currPrice: number;
+  'Meta Data': {
+    '1. Information': string;
+    '2. Symbol': string;
+    '3. Last Refreshed': string;
+  };
+  'Time Series Daily': {
+    [date: string]: {
+      open: string;
+      high: string;
+      low: string;
+      close: string;
+    };
+  };
 }
 interface Stock {
   id: string;

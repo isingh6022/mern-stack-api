@@ -3,7 +3,7 @@ import Joi from 'joi';
 import dotenv from 'dotenv';
 import { EnvSchema, Modes } from '@appTypes';
 
-dotenv.config({ path: path.join(__dirname, '../.env') });
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const envSchema = Joi.object<EnvSchema>()
   .keys({
@@ -16,7 +16,11 @@ const envSchema = Joi.object<EnvSchema>()
     JWT_DURATION_MIN: Joi.number().default(300),
     STOCK_DATA_CACHE_DURATION_SECONDS: Joi.number().default(300),
     REQ_PER_IP: Joi.number().default(5),
-    REQ_PER_IP_TIMEOUT_SECONDS: Joi.number().default(60)
+    REQ_PER_IP_TIMEOUT_SECONDS: Joi.number().default(60),
+
+    API_ENDPOINT: Joi.string().required(),
+    API_KEY: Joi.string().required(),
+    API_FUNCTION: Joi.string().required()
   })
   .options({ allowUnknown: true });
 
@@ -57,6 +61,14 @@ const configs = {
   },
   get reqPerIpTimeoutSec(): number {
     return value.REQ_PER_IP_TIMEOUT_SECONDS;
+  },
+
+  get apiConfigs() {
+    return {
+      url: value.API_ENDPOINT,
+      apikey: value.API_KEY,
+      fn: value.API_FUNCTION
+    };
   }
 };
 

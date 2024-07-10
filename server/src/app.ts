@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import { ApiError, errorHandler } from '@appErrors';
 import { router } from '@appRoutes';
 import { requestFrequencyValidator } from '@appMiddlewares';
+import { RequestCountService } from '@appServices';
 
 /**
  * Creating the app and adding the middlewares.
@@ -22,7 +23,14 @@ app.use(cookieParser());
 
 app.use(compression());
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+morgan.token('req-count', (req) => {
+  return req.socket.remoteAddress
+    ? RequestCountService.getCount(req.socket.remoteAddress) + ''
+    : '-.-.-.-';
+});
+app.use(
+  morgan(':remote-addr :req-count :method :url :status :res[content-length] - :response-time ms')
+);
 
 /**
  * Setting up routes.

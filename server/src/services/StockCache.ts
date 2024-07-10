@@ -33,11 +33,16 @@ export class StockCache extends BaseSingleton implements AppCache<string, Stock>
         if (!stockModelDAO) {
           return null;
         }
+        const formatter = (val: any) => (parseInt(val) < 10 ? '0' + val : val);
+        const currDate = new Date(),
+          dateStr = `${currDate.getFullYear()}-${formatter(currDate.getMonth())}-${formatter(
+            currDate.getDay()
+          )}`;
 
         const stock = {
-          id: stockModelDAO.identifier1,
-          name: stockModelDAO.identifier2,
-          price: stockModelDAO.currPrice
+          id: stockModelDAO['Meta Data']['2. Symbol'],
+          name: stockModelDAO['Meta Data']['2. Symbol'],
+          price: parseInt(stockModelDAO['Time Series Daily'][dateStr]['close'])
         };
         StockCache.addToCache(stock);
 
