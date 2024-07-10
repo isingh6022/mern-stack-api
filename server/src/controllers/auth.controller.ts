@@ -5,6 +5,7 @@ import httpStatus from 'http-status';
 import bcrypt from 'bcryptjs';
 import { configs } from '@appConfig';
 import jsonwebtoken from 'jsonwebtoken';
+import { ApiError } from '@appErrors';
 
 export class AuthController {
   static async register(req: RegisterRequest, res: Response): Promise<void> {
@@ -20,7 +21,7 @@ export class AuthController {
         .json({ message: 'User created successfully. Use your username and password to log in.' })
         .redirect('/auth/login');
     } else {
-      res.status(httpStatus.BAD_REQUEST).json({ message: 'Username already taken.' });
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Username already taken.');
     }
   }
 
@@ -29,8 +30,7 @@ export class AuthController {
     const user = await UserService.getUserByUsername(username);
 
     if (!user) {
-      res.status(httpStatus.BAD_REQUEST).json({ message: 'Invalid username' });
-      return;
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid username.');
     } else {
       const authorized = await bcrypt.compare(password, user.password);
 
@@ -44,7 +44,7 @@ export class AuthController {
           })
           .redirect('/stocks/home');
       } else {
-        res.status(httpStatus.BAD_REQUEST).json({ message: 'Incorrect password' });
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect password.');
       }
     }
   }

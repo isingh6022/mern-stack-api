@@ -23,7 +23,8 @@ export interface LoginRequestSchema {
     password: string;
   };
 }
-
-export interface SaveRequest {
-  param: number;
+export interface StockRequestSchema {
+  params: {
+    stockId: string;
+  };
 }

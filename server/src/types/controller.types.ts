@@ -1,5 +1,6 @@
 import { Request as Req, Response as Res, NextFunction as Next } from 'express';
-import { RegisterRequestSchema, LoginRequestSchema } from './joi.types';
+import { RegisterRequestSchema, LoginRequestSchema, StockRequestSchema } from './joi.types';
+import { Stock, User } from './data.types';
 
 export type AsyncControllerType<RQ extends Req, RS extends Res> = (
   req: RQ,
@@ -22,8 +23,13 @@ export interface LoginRequest extends LoginRequestSchema {
   query: any;
 }
 
-interface AuthorizedRequest {
+export interface AuthorizedRequest {
+  cookies: {
+    jwt: any;
+  };
   body: {
-    id: string;
+    user: User;
   };
 }
+
+export interface StockRequest extends AuthorizedRequest, StockRequestSchema {}

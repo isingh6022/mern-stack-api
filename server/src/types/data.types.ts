@@ -21,9 +21,9 @@ interface UserModelForDAO {
   username: string;
   timeStamp: number;
   password: string;
-  preferences: {
-    stocksIds: string[];
-  };
+  // preferences: {
+  //   stocksIds: string[];
+  // };
 }
 
 enum AuthType {
