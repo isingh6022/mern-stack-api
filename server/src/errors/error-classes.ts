@@ -1,3 +1,5 @@
+import httpStatus from 'http-status';
+
 export class ApiError extends Error {
   stack: string = ''; // acutally initialized by Error.captureStackTrade
 
@@ -27,5 +29,11 @@ export class MultipleSingletonInstancesError extends GenericError {
       MultipleSingletonInstancesError.name,
       `Attempting to create multiple instances of ${className} which is a singleton class.`
     );
+  }
+}
+
+export class MethodNotImplemented extends ApiError {
+  constructor() {
+    super(httpStatus.NOT_IMPLEMENTED, 'Method not implemented');
   }
 }

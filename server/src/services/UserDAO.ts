@@ -2,6 +2,9 @@ import { MultipleSingletonInstancesError } from '@appErrors';
 import { AppDAO, UserModelForDAO } from '@appTypes';
 import { BaseSingleton } from './BaseSingleton';
 
+/**
+ * Class not required since database is not being used currently.
+ */
 export class UserDAO extends BaseSingleton implements AppDAO<string, UserModelForDAO> {
   static get instance(): UserDAO {
     return BaseSingleton._getInstance(UserDAO) || new UserDAO();

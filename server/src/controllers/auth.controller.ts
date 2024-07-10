@@ -27,25 +27,20 @@ export class AuthController {
 
   static async login(req: LoginRequest, res: Response): Promise<void> {
     const { username, password } = req.body;
-    const user = await UserService.getUserByUsername(username);
 
-    if (!user) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid username.');
+    const user = await UserService.login({ username, password });
+
+    if (user) {
+      res
+        .status(httpStatus.OK)
+        .json({ message: 'login successful' })
+        .cookie('jwt', this.getJwtToken(user.id), {
+          httpOnly: true,
+          maxAge: configs.jwtDurationMin * 60
+        })
+        .redirect('/stocks/home');
     } else {
-      const authorized = await bcrypt.compare(password, user.password);
-
-      if (authorized) {
-        res
-          .status(httpStatus.OK)
-          .json({ message: 'login successful' })
-          .cookie('jwt', this.getJwtToken(user.id), {
-            httpOnly: true,
-            maxAge: configs.jwtDurationMin * 60
-          })
-          .redirect('/stocks/home');
-      } else {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect password.');
-      }
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Login failed.');
     }
   }
   private static async getJwtToken(userId: string) {

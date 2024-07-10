@@ -31,7 +31,10 @@ enum AuthType {
   LOGIN = 'login'
 }
 interface User extends UserModelForDAO {}
-interface UserLoginCredentials {}
+interface UserLoginCredentials {
+  username: string;
+  password: string;
+}
 
 /**
  * Stocks

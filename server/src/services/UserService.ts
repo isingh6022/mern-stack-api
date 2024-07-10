@@ -1,29 +1,51 @@
-import { MultipleSingletonInstancesError } from '@appErrors';
+import { ApiError, MethodNotImplemented, MultipleSingletonInstancesError } from '@appErrors';
 import { User, UserLoginCredentials, UserModelForDAO } from '@appTypes';
+import httpStatus from 'http-status';
+import bcrypt from 'bcryptjs';
+import { UserCache } from './UserCache';
 
 export class UserService {
-  static isLoggedIn(userId: string): boolean {
-    return false;
+  static logout(userId: string): void {
+    throw new MethodNotImplemented();
   }
-  static logout(userId: string): void {}
-  static login(creds: UserLoginCredentials): Promise<boolean> {
-    return Promise.resolve(false);
+  static async login(creds: UserLoginCredentials): Promise<User> {
+    const { username, password } = creds;
+    const user = await UserService.getUserByUsername(username);
+
+    if (!user) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid username.');
+    } else {
+      const authorized = await bcrypt.compare(password, user.password);
+
+      if (authorized) {
+        return user;
+      } else {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect password.');
+      }
+    }
   }
   static getUserByUsername(username: string): Promise<User | null> {
-    return Promise.resolve(null);
+    return UserCache.instance.getByUserName(username);
   }
   static getUser(userId: string): Promise<User | null> {
-    return Promise.resolve(null);
+    return UserCache.instance.get(userId);
   }
   static update(user: User): Promise<boolean> {
-    return Promise.resolve(false);
+    throw new MethodNotImplemented();
   }
   static delete(userId: string): Promise<boolean> {
-    return Promise.resolve(false);
+    throw new MethodNotImplemented();
   }
 
-  static create(user: Partial<UserModelForDAO>): Promise<boolean> {
-    return Promise.resolve(false);
+  static create(
+    user: Partial<UserModelForDAO> & { username: string; password: string }
+  ): Promise<boolean> {
+    return UserCache.instance.save({
+      id: '',
+      username: user.username!,
+      timeStamp: new Date().getTime(),
+      password: user.password
+    });
   }
   static requestFrequency(ipAddress: string): {
     count: number;
